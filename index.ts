@@ -7,6 +7,11 @@ import theApp from './src/init/theApp';
 
 const app: Express = express();
 
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger_output.json')
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
 const server = app.listen(8081, () => {
   console.log(`⚡️ [server]: Server is running at https://localhost:${8081}`);
 });
