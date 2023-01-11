@@ -45,6 +45,11 @@ function connected(socket){
       console.log("New client connected, with id: "+socket.id);
       players[socket.id] = data;
       console.log("Current number of players: "+Object.keys(players).length);
+
+      // creating room
+      socket.on('create', function(room) {
+        socket.join(room);
+      });
   })
   socket.on('disconnect', function(){
       delete players[socket.id];
