@@ -5,6 +5,9 @@ import localize from './src/init/localize';
 import db from './src/init/db';
 import theApp from './src/init/theApp';
 
+import mongoose from 'mongoose';
+import { Game } from './src/mvc/models'
+
 const app: Express = express();
 
 const swaggerUi = require('swagger-ui-express')
@@ -38,6 +41,21 @@ app.get('/', (req, res) => {
 let players = {};
 
 io.on('connection', connected);
+
+
+// mongoose testing socket //
+/////////////////////////////
+
+Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: 2 })
+.then(() => console.log("succeed")
+)
+ 
+Game.find({ _id: "63c295dbc1ec60e40b39499a" })
+  .then((data: any) => {
+    console.log(data[0].gameValue)
+})
+
+
 
 //listening to events after the connection is estalished
 function connected(socket){
