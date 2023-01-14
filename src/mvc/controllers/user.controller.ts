@@ -52,9 +52,30 @@ const UserUpdate = async (req: Request | any, res: Response) => {
 };
 
 const UsersList = async (req: Request | any, res: Response) => {
-  User.find({}).then((users: any) => {
-    res.status(200).send(users);
-  });
+
+
+    /*
+    #swagger.tags = ["users"]
+    #swagger.description = 'Get all users'
+  */
+ 
+ // Recognizes the 'consumes' automatically
+ res.setHeader('Content-Type', 'application/json')
+ try {
+     /* #swagger.responses[200] = {
+       description: "Users fetched successfully",
+       schema: { $ref: "#/definitions/users"
+     } */
+     User.find({}).then((users: any) => {
+      res.status(200).send(users);
+    });
+   } catch (err) {
+     /* #swagger.responses[500] = {
+       description: "Unknown server side error",
+       schema:  { $ref: "#/definitions/server side error" }
+     } */
+     return console.log(res, err)
+   }
 };
 
 // export { UserProfile, UserUpdate };
