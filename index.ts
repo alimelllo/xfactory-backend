@@ -4,9 +4,9 @@ import routes from './src/init/routes';
 import localize from './src/init/localize';
 import db from './src/init/db';
 import theApp from './src/init/theApp';
-
 import mongoose from 'mongoose';
 import { Game } from './src/mvc/models'
+import { assert } from 'console';
 
 const app: Express = express();
 
@@ -19,7 +19,12 @@ const server = app.listen(8081, () => {
   console.log(`⚡️ [server]: Server is running at https://localhost:${8081}`);
 });
 
-const io = require('socket.io')(server)
+const io = require('socket.io')(server , {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST" , "PUT" , "DELETE"]
+  }
+})
 
 dotenv.config();
 
@@ -43,40 +48,24 @@ let players = {};
 io.on('connection', connected);
 
 
-// mongoose testing socket //
-/////////////////////////////
-
-Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: 2 })
-.then(() => console.log("succeed")
-)
- 
-Game.find({ _id: "63c295dbc1ec60e40b39499a" })
-  .then((data: any) => {
-    console.log(data[0].gameValue)
-})
 
 
 
 //listening to events after the connection is estalished
 function connected(socket){
-  socket.on('newPlayer', data => {
-      console.log("New client connected, with id: "+socket.id);
-      players[socket.id] = data;
-      console.log("Current number of players: "+Object.keys(players).length);
 
-      // creating room
-      socket.on('create', function(room) {
-        socket.join(room);
-      });
-  })
-  socket.on('disconnect', function(){
-      delete players[socket.id];
-      console.log("Goodbye client with id "+socket.id);
-      console.log("Current number of players: "+Object.keys(players).length);
-  })
-  socket.on('ClientClientHello', data => {
-      socket.broadcast.emit('ServerClientHello', data);
-  })
-}
+
+   // let value =  Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
+   // value.then(( resp ) => { Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: resp[0].gameValue + 1 }).exec().then((rr) => console.log(rr))})
+   
+    //  setInterval(() => {
+ 
+    //   let value = Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
+    //   value.then(( resp ) => { Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: resp[0].gameValue + 1 }).exec();  console.log(resp[0].gameValue)})
+     
+    //  }, 1000 )
+
+}  
+
 
 export default app;
