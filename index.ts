@@ -6,7 +6,8 @@ import db from './src/init/db';
 import theApp from './src/init/theApp';
 import mongoose from 'mongoose';
 import { Game } from './src/mvc/models'
-import { assert } from 'console';
+import { close } from 'fs';
+
 
 const app: Express = express();
 
@@ -43,28 +44,63 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-let players = {};
-
 io.on('connection', connected);
-
-
-
-
 
 //listening to events after the connection is estalished
 function connected(socket){
 
+//////////////////////////
+// Dont Touch This Code //
 
-   // let value =  Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
-   // value.then(( resp ) => { Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: resp[0].gameValue + 1 }).exec().then((rr) => console.log(rr))})
-   
-    //  setInterval(() => {
- 
-    //   let value = Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
-    //   value.then(( resp ) => { Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: resp[0].gameValue + 1 }).exec();  console.log(resp[0].gameValue)})
+
+  let initNumber;
+  let update ;
+  let realTimeNumber;
+  let closeTime;
+
+  const GenerateNewCloseTime = () => {
+    return Math.floor(Math.random() * 10) + 1;
+  }
+
+  const countUp = async ( reset : boolean ) => { 
+    if(reset){
+      Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: 0 }).then((resp) => {
+           setTimeout( () => handleUpdate(GenerateNewCloseTime()) , 5000)
+           return
+       });
+    }
+    if(!reset){
+       initNumber = await Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
+       update = await Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: +(initNumber[0].gameValue + 0.1 ).toFixed(1) }).exec();
+       realTimeNumber = await Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
+    }     
+  }
+  
+    closeTime = GenerateNewCloseTime();
+
+
+const handleUpdate = ( closeTime ) => {
+  console.log(`close at: ${closeTime}`)
+  let interval : any = setInterval(function () {
      
-    //  }, 1000 )
+    if( realTimeNumber &&  Math.floor(realTimeNumber[0].gameValue) === closeTime ){
+        clearInterval(interval); 
+        countUp(true);
+        socket.emit('test' , 'Exploded')
+        return
+        }
 
+    realTimeNumber && console.log(realTimeNumber[0].gameValue);
+    countUp(false); 
+    realTimeNumber && socket.emit('test' , realTimeNumber[0].gameValue );
+
+    }, 200);
+}
+    
+handleUpdate(closeTime);
+
+// Dont Touch This Code //
+//////////////////////////
 }  
 
 
