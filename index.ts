@@ -8,7 +8,6 @@ import mongoose from 'mongoose';
 import { Game } from './src/mvc/models'
 import { close } from 'fs';
 
-
 const app: Express = express();
 
 const swaggerUi = require('swagger-ui-express')
@@ -51,23 +50,33 @@ function connected(socket){
 
 //////////////////////////
 // Dont Touch This Code //
+let gameIsRuning : any = false;
+
+// const getGameStatus = async () => {
+//    Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec().then(( resp ) => {
+  //  console.log(resp[0])
+  
 
 
-  let initNumber;
-  let update ;
-  let realTimeNumber;
-  let closeTime;
+ 
+    
+    // Game.update({ _id: "63c295dbc1ec60e40b39499a", gameIsRuning: true }).exec().then(() => {
+  let initNumber = 0;
+  let update = null ;
+  let realTimeNumber = 0;
+  let closeTime ;
 
   const GenerateNewCloseTime = () => {
-    return Math.floor(Math.random() * 10) + 1;
+    return Math.round(Math.random() * 15) + 1;
   }
 
   const countUp = async ( reset : boolean ) => { 
     if(reset){
-      Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: 0 }).then((resp) => {
+
+      Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: 0 }).exec().then(() => {
            setTimeout( () => handleUpdate(GenerateNewCloseTime()) , 5000)
-           return
-       });
+       }); 
+      realTimeNumber = await Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
     }
     if(!reset){
        initNumber = await Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
@@ -75,33 +84,48 @@ function connected(socket){
        realTimeNumber = await Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
     }     
   }
-  
+// if(resp[0].gameIsRuning === false){
     closeTime = GenerateNewCloseTime();
-
+// }
 
 const handleUpdate = ( closeTime ) => {
-  console.log(`close at: ${closeTime}`)
+  console.log(`close at : ${closeTime}`)
+  
   let interval : any = setInterval(function () {
      
-    if( realTimeNumber &&  Math.floor(realTimeNumber[0].gameValue) === closeTime ){
+    if( realTimeNumber &&  Math.trunc(realTimeNumber[0].gameValue) + 1 === closeTime ){
         clearInterval(interval); 
         countUp(true);
-        socket.emit('test' , 'Exploded')
+        socket.emit('test' , 'Expired')
         return
         }
 
     realTimeNumber && console.log(realTimeNumber[0].gameValue);
-    countUp(false); 
-    realTimeNumber && socket.emit('test' , realTimeNumber[0].gameValue );
-
-    }, 200);
-}
     
-handleUpdate(closeTime);
+    realTimeNumber && socket.emit('test' , realTimeNumber[0].gameValue );
+    countUp(false); 
+    }, 300);
+}
+// if( resp[0].gameIsRuning === false){
+   handleUpdate(closeTime);
+// }
+
+//     })
+
+//    });
+// }
+
+
+// getGameStatus();
+
+
+
+}
+
 
 // Dont Touch This Code //
 //////////////////////////
-}  
+
 
 
 export default app;
