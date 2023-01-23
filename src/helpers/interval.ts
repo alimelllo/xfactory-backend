@@ -19,12 +19,22 @@ export function connected(socket){
     return Math.round(Math.random() * 10 ) + 1;
   }
 
+  const handleLoading = () => {
+      let init = 7;
+      let interval = setInterval(() => {
+      webSocket.emit('loadingToStart' , init-- )
+      init === -1 ? clearInterval(interval) : null;
+    } , 1000 )
+   
+  }
+
   const countUp = async ( reset : boolean ) => { 
     if(reset){
 
       Game.update({ _id: "63c295dbc1ec60e40b39499a", gameValue: 0 }).exec().then(() => {
-           setTimeout( () => handleUpdate(GenerateNewCloseTime()) , 5000)
+           setTimeout( () => handleUpdate(GenerateNewCloseTime()) , 10000)
        }); 
+      realTimeNumber = 0;
       realTimeNumber = await Game.find({ _id: "63c295dbc1ec60e40b39499a" }).exec();
     }
     if(!reset){
@@ -39,13 +49,16 @@ export function connected(socket){
 
 export const handleUpdate = ( closeTime ) => {
   console.log(`close at : ${closeTime}`)
-  
+ 
   let interval : any = setInterval(function () {
      
-    if( realTimeNumber &&  Math.trunc(realTimeNumber[0].gameValue) + 1 === closeTime ){
+    if( realTimeNumber &&  Math.trunc(realTimeNumber[0].gameValue) + 1 === 5 ){
         clearInterval(interval); 
         countUp(true);
         webSocket.emit('gameValue' , 'Expired' )
+        setTimeout(() => {
+          handleLoading();
+        } , 2000)  
         return
         }
 
