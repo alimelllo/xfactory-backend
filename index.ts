@@ -41,7 +41,6 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-io.on('connection', connected);
-
+io.on( 'connection', connected );
 
 export default app;

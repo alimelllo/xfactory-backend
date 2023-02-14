@@ -2,12 +2,21 @@ import { Game } from '../../src/mvc/models';
 
 // Note : this web socket logic is kinda secured 
 // it wont work with tw0 browsers at the same time
-
-
+const Message = ( webSocket ) => {
+  let globalMessagesArr = []
+  webSocket.on('message' , ( data : any ) => {
+  console.log(data)
+  globalMessagesArr.push(data)
+  webSocket.emit('getMyMessage' , data);
+  webSocket.emit('getGlobalMessage' , globalMessagesArr)
+ })
+}
+ 
 let webSocket;
 
 export function connected(socket){     
-    webSocket = socket
+    webSocket = socket;
+    Message(socket);
 }
 
   let initNumber = 0;
@@ -25,7 +34,6 @@ export function connected(socket){
       webSocket.emit('loadingToStart' , init-- )
       init === -1 ? clearInterval(interval) : null;
     } , 1000 )
-   
   }
 
   const countUp = async ( reset : boolean ) => { 
@@ -55,7 +63,7 @@ export const handleUpdate = ( closeTime ) => {
     if( realTimeNumber &&  Math.trunc(realTimeNumber[0].gameValue) + 1 === 5 ){
         clearInterval(interval); 
         countUp(true);
-        webSocket.emit('gameValue' , 'Expired' )
+        webSocket.emit('gameValue' , 'Expired')
         setTimeout(() => {
           handleLoading();
         } , 2000)  
@@ -70,7 +78,6 @@ export const handleUpdate = ( closeTime ) => {
 }
 
 handleUpdate(closeTime);
-
 
 
 
