@@ -1,14 +1,31 @@
-import { Game } from '../../src/mvc/models';
+import { Game , GlobalMessages } from '../../src/mvc/models';
 
 // Note : this web socket logic is kinda secured 
 // it wont work with tw0 browsers at the same time
+
 const Message = ( webSocket ) => {
-  let globalMessagesArr = []
+
+  GlobalMessages.find({}).then((messages: any) => {
+    // messages.push(data)
+    webSocket.emit('getGlobalMessage' , messages);
+      });
+
+
   webSocket.on('message' , ( data : any ) => {
-  console.log(data)
-  globalMessagesArr.push(data)
-  webSocket.emit('getMyMessage' , data);
-  webSocket.emit('getGlobalMessage' , globalMessagesArr)
+
+    GlobalMessages.create(data).then(() => {
+      GlobalMessages.find({}).then((messages: any) => {
+      // messages.push(data)
+      webSocket.emit('getGlobalMessage' , messages);
+      console.log(messages);
+      
+        });
+    })
+
+
+    
+  
+ 
  })
 }
  
