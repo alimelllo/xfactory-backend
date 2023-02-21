@@ -5,28 +5,20 @@ import { Game , GlobalMessages } from '../../src/mvc/models';
 
 const Message = ( webSocket ) => {
 
-  GlobalMessages.find({}).then((messages: any) => {
-    // messages.push(data)
-    webSocket.emit('getGlobalMessage' , messages);
-      });
-
-
   webSocket.on('message' , ( data : any ) => {
 
     GlobalMessages.create(data).then(() => {
       GlobalMessages.find({}).then((messages: any) => {
-      // messages.push(data)
+     
       webSocket.emit('getGlobalMessage' , messages);
-      console.log(messages);
-      
+     
         });
     })
 
-
-    
-  
- 
  })
+
+
+
 }
  
 let webSocket;

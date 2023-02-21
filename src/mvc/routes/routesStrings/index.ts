@@ -17,4 +17,6 @@ export const Routes = {
   profile: '/profile',
   update: '/update',
   users: '/users',
+
+  messages:'/messages'
 };
