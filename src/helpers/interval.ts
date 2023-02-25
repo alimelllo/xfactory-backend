@@ -5,17 +5,27 @@ import { Game , GlobalMessages } from '../../src/mvc/models';
 
 const Message = ( webSocket ) => {
 
-  webSocket.on('message' , ( data : any ) => {
+webSocket.on('imTyping' , ( name : any ) => {
+  name && webSocket.broadcast.emit('isTyping' , `${name} is typing ...`);
+  !name && webSocket.broadcast.emit('isTyping' , name);
+})
 
-    GlobalMessages.create(data).then(() => {
-      GlobalMessages.find({}).then((messages: any) => {
-     
-      webSocket.emit('getGlobalMessage' , messages);
-     
-        });
-    })
 
- })
+
+  const sendToOthers = ( arr : any ) => {
+    webSocket.broadcast.emit('getGlobalMessage' , arr);
+  }
+
+    webSocket.on('message' , ( data : any ) => {
+  
+      GlobalMessages.create(data).then(() => {
+        GlobalMessages.find({}).then((messages: any) => {
+          sendToOthers(messages);
+          webSocket.emit('getGlobalMessage' , messages);
+          });
+      })
+  
+   })
 
 
 
