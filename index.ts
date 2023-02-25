@@ -43,26 +43,5 @@ app.get('/', (req, res) => {
 })
 
 io.on( 'connection', connected );
-//
 
-// function connect( webSocket ){
- 
-
-// const send = ( arr : any ) => {
-//   webSocket.broadcast.emit('getGlobalMessage' , arr);
-// }
-
-
-//   webSocket.on('message' , ( data : any ) => {
-
-//     GlobalMessages.create(data).then(() => {
-//       GlobalMessages.find({}).then((messages: any) => {
-//         send(messages)
-//         webSocket.emit('getGlobalMessage' , messages);
-     
-//         });
-//     })
-
-//  })
-//}
 export default app;
