@@ -5,33 +5,28 @@ import { User } from '../models';
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
-// const UserProfile = (req: Request | any, res: Response) => {
-//   const user_id = getIDfromToken(req);
-//   console.log('user_id', user_id);
-//   return User.findById(user_id, function (err, user) {
-//     if (err) throw err;
 
-//     if (!user) {
-//       res.status(403).json({
-//         success: false,
-//         message: req.i18n.t('simpleStringWithVariable', {
-//           variable1: '3',
-//           variable2: '3',
-//         }),
-//       });
-//     } else if (user) {
-//       res.status(200).send({
-//         success: true,
-//         user: {
-//           id: user._id,
-//           name: user.name,
-//           email: user.email,
-//           mobile: user.mobile,
-//         },
-//       });
-//     }
-//   });
-// };
+// const AddFriend = async (req: Request | any, res: Response) => {
+ 
+// try {
+//   console.log(req.body);
+//   const { myName , friendName } = req.body;
+//       User.findOne({ name: myName }).then(( result ) => {
+//        User.updateOne(
+//         { _id: result.id }, 
+//         { $push: { friends : { name : friendName }} }).then(() => {
+//        User.findOne({ name: myName }).then(( result ) => { 
+//         console.log( result );
+//       }); 
+//      })
+//    }) 
+//  } catch (err) {
+//       return console.log(res, err);
+//  }
+// }
+
+
+
 const UserUpdate = async (req: Request | any, res: Response) => {
   const user_id = getIDfromToken(req);
   console.log('user_id', user_id);
@@ -53,13 +48,6 @@ const UserUpdate = async (req: Request | any, res: Response) => {
 
 const UsersList = async (req: Request | any, res: Response) => {
 
-
-    /*
-    #swagger.tags = ["users"]
-    #swagger.description = 'Get all users'
-  */
- 
- // Recognizes the 'consumes' automatically
  res.setHeader('Content-Type', 'application/json')
  try {
      /* #swagger.responses[200] = {

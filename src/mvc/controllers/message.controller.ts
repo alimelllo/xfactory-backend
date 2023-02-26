@@ -7,13 +7,11 @@ const MessageList = async (req: Request | any, res: Response) => {
 
  res.setHeader('Content-Type', 'application/json')
  try {
-   
     GlobalMessages.find({}).then((messages: any) => {
-        
       res.status(200).send(messages);
     });
-   } catch (err) {
-   
+   }
+ catch (err) {
      return console.log(res, err)
    }
 };

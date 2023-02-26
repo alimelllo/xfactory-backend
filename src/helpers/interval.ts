@@ -11,7 +11,6 @@ webSocket.on('imTyping' , ( name : any ) => {
 })
 
 
-
   const sendToOthers = ( arr : any ) => {
     webSocket.broadcast.emit('getGlobalMessage' , arr);
   }
