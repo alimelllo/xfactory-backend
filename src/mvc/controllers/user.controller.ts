@@ -6,24 +6,38 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 
-// const AddFriend = async (req: Request | any, res: Response) => {
- 
-// try {
-//   console.log(req.body);
-//   const { myName , friendName } = req.body;
-//       User.findOne({ name: myName }).then(( result ) => {
-//        User.updateOne(
-//         { _id: result.id }, 
-//         { $push: { friends : { name : friendName }} }).then(() => {
-//        User.findOne({ name: myName }).then(( result ) => { 
-//         console.log( result );
-//       }); 
-//      })
-//    }) 
-//  } catch (err) {
-//       return console.log(res, err);
-//  }
-// }
+const AddFriend = async (req: Request | any, res: Response) => {
+try {
+  const { myId , friendName } = req.body;
+      User.findOne({ _id: myId }).then(( result ) => {
+       User.updateOne(
+        { _id: result.id }, 
+        { $push: { friends : { name : friendName }} }).then(() => {
+       User.findOne({ _id: myId }).then(( response ) => { 
+        res.status(200).send( response );
+      }); 
+     })
+   }) 
+  
+
+   
+ } catch (err) {
+      return console.log(res, err);
+ }
+}
+
+const currentUserInfo = async (req: Request | any, res: Response) => {
+ const { id } = req.body
+  try{
+  User.findOne({ _id : id }).then((user) => {
+    console.log(user)
+    res.status(200).send( user );
+  })
+ }
+ catch(err){
+  return console.log(res, err);
+ }
+}
 
 
 
@@ -67,4 +81,4 @@ const UsersList = async (req: Request | any, res: Response) => {
 };
 
 // export { UserProfile, UserUpdate };
-export { UserUpdate, UsersList };
+export { UserUpdate, UsersList , AddFriend , currentUserInfo };

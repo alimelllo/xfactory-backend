@@ -18,5 +18,7 @@ export const Routes = {
   update: '/update',
   users: '/users',
 
+  addFriend : '/addFriend',
+  currentUserInfo : '/currentUserInfo',
   messages:'/messages'
 };
