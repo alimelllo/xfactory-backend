@@ -19,12 +19,29 @@ try {
      })
    }) 
   
-
-   
  } catch (err) {
       return console.log(res, err);
  }
 }
+
+const removeFriend = async (req: Request | any, res: Response) => {
+  try {
+    const { myId , friendName } = req.body;
+        User.findOne({ _id: myId }).then(( result ) => {
+         User.updateOne(
+          { _id: result.id }, 
+          { $pull: { friends : { name : friendName }} }).then(() => {
+         User.findOne({ _id: myId }).then(( response ) => { 
+          res.status(200).send( response );
+        }); 
+       })
+     }) 
+    
+   } catch (err) {
+        return console.log(res, err);
+   }
+  }
+
 
 const currentUserInfo = async (req: Request | any, res: Response) => {
  const { id } = req.body
