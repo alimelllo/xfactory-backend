@@ -27,6 +27,7 @@ try {
 const removeFriend = async (req: Request | any, res: Response) => {
   try {
     const { myId , friendName } = req.body;
+    console.log({ myId , friendName })
         User.findOne({ _id: myId }).then(( result ) => {
          User.updateOne(
           { _id: result.id }, 
@@ -57,7 +58,6 @@ const currentUserInfo = async (req: Request | any, res: Response) => {
 }
 
 
-
 const UserUpdate = async (req: Request | any, res: Response) => {
   const user_id = getIDfromToken(req);
   console.log('user_id', user_id);
@@ -86,7 +86,8 @@ const UsersList = async (req: Request | any, res: Response) => {
        schema: { $ref: "#/definitions/users"
      } */
      User.find({}).then((users: any) => {
-      res.status(200).send(users);
+      const userNames = users.map(( item : any) => ( item.name ))
+      res.status(200).send(userNames);
     });
    } catch (err) {
      /* #swagger.responses[500] = {
@@ -97,5 +98,5 @@ const UsersList = async (req: Request | any, res: Response) => {
    }
 };
 
-// export { UserProfile, UserUpdate };
-export { UserUpdate, UsersList , AddFriend , currentUserInfo };
+
+export { UserUpdate, UsersList , AddFriend , currentUserInfo , removeFriend };

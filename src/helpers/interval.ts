@@ -81,7 +81,7 @@ export const handleUpdate = ( closeTime ) => {
     if( realTimeNumber &&  Math.trunc(realTimeNumber[0].gameValue) + 1 === 5 ){
         clearInterval(interval); 
         countUp(true);
-        webSocket.emit('gameValue' , 'Expired')
+        webSocket.emit('gameValue' , 'Expired');
         setTimeout(() => {
           handleLoading();
         } , 2000)  
