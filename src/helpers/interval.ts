@@ -37,6 +37,7 @@ export function connected(socket){
     Message(socket);
 }
 
+
   let initNumber = 0;
   let update = null ;
   let realTimeNumber = 0;
