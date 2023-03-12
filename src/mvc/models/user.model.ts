@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { ISchemaType } from '@/interfaces/interface';
 import { CreateSchema } from '../../helpers/createSchema';
 
 const bcrypt = require('bcryptjs');
@@ -10,6 +9,7 @@ const schema = CreateSchema({
   email: { type: String, unique: true, lowercase: true },
   mobile: { type: String, unique: true },
   password: { type: String },
+  friends: []
 });
 
 schema.pre('save', function (next) {
