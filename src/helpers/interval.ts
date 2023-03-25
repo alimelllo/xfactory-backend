@@ -30,7 +30,7 @@ webSocket.on('imTyping' , ( name : any ) => {
 
 }
  
-let webSocket;
+let webSocket = null ;
 
 export function connected(socket){     
     webSocket = socket;
