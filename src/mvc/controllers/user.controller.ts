@@ -6,6 +6,35 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 
+
+const addProfileImage = async (req: Request | any, res: Response) => {
+  try {
+    const { userId , image } = req.body;
+
+        User.findOne({ _id: userId }).then(( result ) => {
+         User.updateOne(
+          { _id: result.id }, 
+          { profileImage : image }).then(() => {
+         User.findOne({ _id: userId }).then(( response ) => { 
+          res.status(200).send( response );
+        }); 
+       })
+     }) 
+    
+   } catch (err) {
+        return console.log(res, err);
+   }
+  }
+
+
+
+
+
+
+
+
+
+
 const AddFriend = async (req: Request | any, res: Response) => {
 try {
   const { myId , friendName } = req.body;
@@ -99,4 +128,4 @@ const UsersList = async (req: Request | any, res: Response) => {
 };
 
 
-export { UserUpdate, UsersList , AddFriend , currentUserInfo , removeFriend };
+export { UserUpdate, UsersList , AddFriend , currentUserInfo , removeFriend , addProfileImage };
