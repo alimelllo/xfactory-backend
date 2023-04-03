@@ -5,7 +5,6 @@ import localize from './src/init/localize';
 import db from './src/init/db';
 import theApp from './src/init/theApp';
 import { connected } from './src/helpers/interval';
-import { GlobalMessages } from './src/mvc/models';
 
 const app: Express = express();
 
@@ -39,7 +38,7 @@ db();
 routes(app);
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Game Server World!')
 })
 
 io.on( 'connection', connected );
