@@ -17,7 +17,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 export const server = app.listen(8081, () => {
   console.log(`⚡️ [server]: Server is running at https://localhost:${8081}`);
 });
-
+server.timeout = 1000000;
 const io = require('socket.io')(server , {
   cors: {
     origin: "*",
