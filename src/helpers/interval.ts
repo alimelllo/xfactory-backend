@@ -79,7 +79,7 @@ export const handleUpdate = ( closeTime ) => {
  
   let interval : any = setInterval(function () {
      
-    if( realTimeNumber &&  Math.trunc(realTimeNumber[0].gameValue) === 4 ){
+    if( realTimeNumber &&  Math.trunc(realTimeNumber[0].gameValue) === 27 ){
         clearInterval(interval); 
         countUp(true);
         webSocket.emit('gameValue' , 'Expired');
