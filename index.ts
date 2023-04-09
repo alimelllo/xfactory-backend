@@ -32,9 +32,10 @@ const corsOptions = {
   origin: '*',
 };
 
-app.use(bodyParser.json({limit: '1mb'}));
-app.use(bodyParser.urlencoded({limit: "1mb", extended: true, parameterLimit:5000}));
-app.use(bodyParser.text({ limit: '5mb' }));
+app.use(bodyParser.json({limit: '0.5mb'}));
+app.use(bodyParser.urlencoded({limit: "0.5mb", extended: true, parameterLimit:5000}));
+app.use(bodyParser.text({ limit: '0.5mb' }));
+
 app.use(cors(corsOptions));
 
 theApp(app);
